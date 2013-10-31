@@ -8,7 +8,7 @@ interface Walkable
 
 class Wheels
 {
-    public function roll();
+    public function roll() {}
 }
 
 class Leg implements Walkable
