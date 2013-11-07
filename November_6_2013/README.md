@@ -1,18 +1,85 @@
-Magic Methods
+# November 30th, 2013
 
-http://www.slideshare.net/dstockto/php-5-magic-methods
+[David Stockton Slideshow on Magic Methods](http://www.slideshare.net/dstockto/php-5-magic-methods)
 
- __construct()
+We had 7 Developers in Attendance. The Topic Covered was PHP Magic Methods.
 
- First thing called when you instantiate a new object of a class. Set variables.
- Avoid doing "work".
+## List of Magic Methods 
+* __construct()
+* __destruct()
+* __call()
+* __get()
+* __set()
+* __isset()
+* __unset()
+* __sleep()
+* __wakeup()
+* __toString()
+* __invoke()
+* __set_state()
+* __clone()
+* __callStatic()
 
- Constructor is not required.
+## Topics Covered in Session
 
- Does not require parameters. Can pass parameters.
+* **__construct()**
+* **__destruct()**
+* **__call()**
+* **__set()**
+* **__isset()**
+* **__unset()**
 
- Call parent constructor:
 
+##__construct()
+
+The magic method \__construct() is the first thing called when instatiating a new object of a class. This magic method is normally used to set properties and is considered a best practice to avoid doing any *"Work"* in this magic method. The \__construct() method can accept parameters but is not required and can also be set as private or protected for the PHP visability modifiers. The \__construct() method can be extended to other classes and automatically defaults to the parents __construct() method unless overridden. 
+
+### Default to Parent __Construct
+
+```
+ class B
+ {
+    public function __construct()
+    {
+        echo 'Created a B';
+    }
+ }
+
+ class A extends B
+ {
+ 	//No __construct() defined 
+ }
+
+ $obj = new A;
+```
+
+### Override Parent __Construct()
+
+```
+Call parent constructor:
+
+ class B
+ {
+    public function __construct()
+    {
+        echo 'Created a B';
+    }
+ }
+
+ class A extends B
+ {
+    public function __construct()
+    {
+        echo 'Created an A';
+    }
+ }
+
+ $obj = new A;
+
+```
+### Call Parent __Construct()
+
+```
  class B
  {
     public function __construct()
@@ -32,95 +99,107 @@ http://www.slideshare.net/dstockto/php-5-magic-methods
 
  $obj = new A;
 
- Can you have a private or protected constructor?
- Dave: No
- Tom: No
- Mansoor: Yes
+```
 
- Correct answer: yes
+** Please see [constructor_test.php](https://github.com/mansoormb/session_code/blob/master/November_6_2013/constructor_test.php) for code examples **
 
- How do you create an object if the constructor is not public?
+##__destruct()
 
+** Called when an object is destroy ** 
+
+Can be triggered when using the unset() method.
+ 
+```
 
 class Bar
 {
-    private function __construct()
+    protected $name
+
+    public function __construct($name)
     {
-        echo 'I am a secret';
+        $this->name = $name;
+
+        echo 'Created a new Bar: ', $this->name, "\n";
     }
 
+    public function __destruct()
+    {
+        echo "Burned {$this->name} to the ground.", "\n";
+    }
 }
 
-$foo = new Bar; // Causes an error
+```
 
-Because it is private, I cannot just called "new" from anywhere.
+** See code example [destructor_test.php](https://github.com/mansoormb/session_code/blob/master/November_6_2013/destructor_test.php) **
 
-class BetterBar
+##__call()
+
+** is triggered when invoking inaccessible methods in an object context. **
+
+```
+class MyClass
 {
-    protected static $instance;
-
-    private function __construct()
+    public function __call($name, $params)
     {
-        echo 'I am a secret';
+        echo 'Tried to call ' . $name . "\n";
+        var_dump($params);
     }
 
-    public static function getInstance()
+    public function foo()
     {
-        if (is_null(self::instance)) {
-            // Using static for late static binding
-            self::instance = new self;
+        echo 'This be foo, foo!' , "\n";
+    }
+}
+
+$class = new MyClass;
+$class->foobar();
+
+```
+
+** See code example [call_test.php](https://github.com/mansoormb/session_code/blob/master/November_6_2013/call_test.php) or [real_world_call.php](https://github.com/mansoormb/session_code/blob/master/November_6_2013/real_world_call.php) for a real world example **
+
+##__get()
+** Getting the value of a property that is not in the current scope **
+
+```
+public function __get($name)
+    {
+        if (isset($this->$name)) {
+            return $this->$name;
         }
-
-        return self::instance;
     }
-}
 
-// Get instance of BetterBar
-$instance = BetterBar::getInstance(); // I am a secret
-$instance2 = BetterBar::getInstance(); // Does not create a new instance
+```
+##__set()
 
-class EvenBetterBar extends BetterBar
-{
+**Setting that value of a variable that is not in the current scope **
 
-}
+```
+ public function __set($name, $value)
+    {
+        $this->$name = $value;
+    }
 
-$otherInstance = EvenBetterBar::getInstance();
+```
+##__isset()
+**Checking if a value isset for a variable not in the current scope **
 
-See constructor_test.php
+```
+  public function __isset($name)
+    {
+        return isset($this->$name);
+    }
 
+```
+##__unset()
+** Unsetting a variable nor in the current scope **
 
- __destruct()
+```
+public function __unset($name)
+    {
+        unset($this->$name);
+    }
 
- Called whenever you destroy an object.
+```
 
- $foo = new Bar;
- unset($foo);
-
- new Bar;
-
-See code example
-
-__call()
-
-See code examples
-
-
-__get()
-
-Getting the the value of a variable that is not in the current scope
-
-__set(),
-
-Setting that value of a variable that is not in the current scope
-
-__isset()
-
-Checking if a value isset for a variable not in the current scope
-
-__unset()
-
-Unsetting a variable not in the current scope
-
- __sleep(), __wakeup(), __toString(), __invoke(), __set_state() and __clone()
-, __callStatic(),
-
+** For more information view [get_set_isset_unset.php](https://github.com/mansoormb/session_code/blob/master/November_6_2013/get_set_isset_unset.php) **
