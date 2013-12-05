@@ -32,3 +32,26 @@ validation.
 
 -----------------------------------------------
 
+### Notes on this week's code
+
+I added a composer.json file that indicates that DI\ namespaced code will be autoloaded. To create the vendor directory and the autoloader, you can run 
+
+```
+composer dump-autoload
+```
+
+in this directory.
+
+Since we don't have any requirements, we don't need to install anything, but running
+
+```
+composer install
+```
+
+will also result in the autoloader being created.
+
+In order to install composer, if you don't have it 
+already, please visit <http://getcomposer.org/download/> 
+and follow the instructions there.
+
+Composer will likely be playing a larger role in our study sessions going forward so it's a good idea to get it installed and ready.
