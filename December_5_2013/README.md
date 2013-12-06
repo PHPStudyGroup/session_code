@@ -28,7 +28,8 @@ to be retrieved upon validation regarding what fields had
 errors and what those errors are.
 
 Should have an isValid method which will perform the 
-validation.
+validation. It should return a boolean indicating if the
+inputs are valid or not.
 
 -----------------------------------------------
 

@@ -1,4 +1,4 @@
-<phpunit bootstrap="Bootstrap.php" color="true" strict="true">
+<phpunit bootstrap="Bootstrap.php" colors="true" strict="true">
     <testsuites>
         <testsuite name="Validator Tests">
             <directory>.</directory>
