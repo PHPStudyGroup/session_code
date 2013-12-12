@@ -1,0 +1,17 @@
+{
+    "name": "phpstudygroup/december-5-2013",
+    "description": "December 5, 2013 study group - Unit Testing and Dependency Injection",
+    "authors": [
+        {
+            "name": "David Stockton",
+            "email": "github@davidstockton.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-0": {
+            "DI\\": "src/"
+        }
+    }
+}
