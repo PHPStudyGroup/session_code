@@ -39,3 +39,8 @@ This week, we are starting with code from the December 5th directory. We ended l
 week with some tests and working code for validation of username and password inputs
 according to the requirements layed out above. This week focuses on refactoring,
 dependency injection and how these tie together with unit testing.
+
+#### What to refactor
+StringLength
+Regex
+Required

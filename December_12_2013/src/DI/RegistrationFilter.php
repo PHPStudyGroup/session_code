@@ -7,6 +7,14 @@ class RegistrationFilter
     protected $values;
     protected $messages = array();
 
+    /** @var  InputFilterInterface */
+    protected $requiredFilter;
+
+    public function __construct(InputFilterInterface $required)
+    {
+        $this->requiredFilter = $required;
+    }
+    
     /**
      * Checks if the values are valid. Returns true if they
      * are, false otherwise.
@@ -32,11 +40,17 @@ class RegistrationFilter
      */
     public function validateUsername()
     {
+
+        if (isset($this->values['username'])) {
+            $this->requiredFilter
+                ->setValue($this->values['username']);
+        }
+
         // Username is required
-        if (!isset($this->values['username'])) {
-            $this->addMessage(
+        if (!$this->requiredFilter->isValid()) {
+            $this->addMessages(
                 'username',
-                'Username is required'
+                $this->requiredFilter->getMessages()
             );
 
             return false;
@@ -73,7 +87,11 @@ class RegistrationFilter
 
     public function validatePassword()
     {
-        if (!isset($this->values['password'])) {
+        if (isset($this->values['password'])) {
+            $this->requiredFilter
+                ->setValue($this->values['password']);
+        }
+        if (!$this->requiredFilter->isValid()) {
             $this->addMessage('password', 'Password is required');
             return false;
         }
@@ -149,6 +167,11 @@ class RegistrationFilter
         $this->messages[$field][] = $message;
 
         return $this;
+    }
+
+    public function addMessages($field, array $messages = null)
+    {
+        $this->messages[$field] = $messages;
     }
 
     /**
